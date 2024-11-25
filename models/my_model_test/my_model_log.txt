@@ -5,7 +5,7 @@ test_mode True
 n_test_idx 2
 seed 1312
 fine_tune False
-one_vs_all False
+one_vs_all True
 c_0 ['lcdm']
 c_1 ['dgp', 'fR', 'rand', 'wcdm']
 dataset_balanced False
@@ -54,13 +54,430 @@ patience 100
 GPU True
 decay 0.95
 BatchNorm True
+group_lab_dict {'dgp': 'non_lcdm', 'fR': 'non_lcdm', 'rand': 'non_lcdm', 'wcdm': 'non_lcdm', 'lcdm': 'lcdm'}
 
 ------------ CREATING DATA GENERATORS ------------
-labels : ['train_data']
+labels : ['lcdm', 'non_lcdm']
 Labels encoding: 
-{'train_data': 0}
-n_labels : 1
-train_data - 0 training examples
+{'lcdm': 0, 'non_lcdm': 1}
+n_labels : 2
+dgp - 18475 training examples
+fR - 18475 training examples
+lcdm - 18475 training examples
+rand - 18475 training examples
+wcdm - 18475 training examples
 
-N. of data files: 0
+N. of data files: 18475
 Choice with seed 1312 
+all_index shape for test mode: 8
+get_all_indexes labels dict: {'lcdm': 0, 'non_lcdm': 1}
+create_generators n_labels: 2
+create_generators n_labels_eff: 5
+create_generators len_c1: 1
+Check for no duplicates in test: (0=ok):
+0.0
+Check for no duplicates in val: (0=ok):
+0
+N of files in training set: 4
+N of files in validation set: 4
+N of files in test set: 0
+Check - total: 8
+--create_generators, train indexes
+batch_size: 200
+Train index: [  325  2781  9342 15017]
+--create_generators, validation indexes
+Validation index: [11211 11610 14145  2102]
+len(train_index_1), batch_size, n_labels_eff, n_noisy_samples = 4, 200, 5, 10
+
+--DataGenerator Train
+Data Generator Initialization
+Using z bins [0, 1, 2, 3]
+Specified k_max is 2.5
+Corresponding i_max is 100
+Closest k to k_max is 2.539859
+New data dim: (100, 1)
+Final i_max used is 100
+one_vs_all: True
+dataset_balanced: False
+base_case_dataset: True
+N. classes: 5
+N. n_classes in output: 2
+list_IDs length: 4
+n_indexes (n of file IDs read for each batch): 4
+batch size: 200
+n_batches : 1
+For each batch we read 4 file IDs
+For each file ID we have 5 labels
+For each ID, label we have 10 realizations of noise
+In total, for each batch we have 200 training examples
+Input batch size: 200
+N of batches to cover all file IDs: 1
+
+--DataGenerator Validation
+Data Generator Initialization
+Using z bins [0, 1, 2, 3]
+Specified k_max is 2.5
+Corresponding i_max is 100
+Closest k to k_max is 2.539859
+New data dim: (100, 1)
+Final i_max used is 100
+one_vs_all: True
+dataset_balanced: False
+base_case_dataset: True
+N. classes: 5
+N. n_classes in output: 2
+list_IDs length: 4
+n_indexes (n of file IDs read for each batch): 4
+batch size: 200
+n_batches : 1
+For each batch we read 4 file IDs
+For each file ID we have 5 labels
+For each ID, label we have 10 realizations of noise
+In total, for each batch we have 200 training examples
+Input batch size: 200
+N of batches to cover all file IDs: 1
+------------ DONE ------------
+
+------------ BUILDING MODEL ------------
+Input shape (100, 4)
+using 1D layers and 4 channels
+Expected output dimension of layer conv1d_flipout: 46.0
+Expected output dimension of layer max_pooling1d: 23.0
+Expected output dimension of layer conv1d_flipout_1: 10.0
+Expected output dimension of layer max_pooling1d_1: 9.0
+Expected output dimension of layer conv1d_flipout_2: 8.0
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 100, 4)]          0         
+                                                                 
+ conv1d_flipout (Conv1DFlipo  (None, 46, 8)            648       
+ ut)                                                             
+                                                                 
+ max_pooling1d (MaxPooling1D  (None, 23, 8)            0         
+ )                                                               
+                                                                 
+ batch_normalization (BatchN  (None, 23, 8)            32        
+ ormalization)                                                   
+                                                                 
+ conv1d_flipout_1 (Conv1DFli  (None, 10, 16)           1296      
+ pout)                                                           
+                                                                 
+ max_pooling1d_1 (MaxPooling  (None, 9, 16)            0         
+ 1D)                                                             
+                                                                 
+ batch_normalization_1 (Batc  (None, 9, 16)            64        
+ hNormalization)                                                 
+                                                                 
+ conv1d_flipout_2 (Conv1DFli  (None, 8, 32)            2080      
+ pout)                                                           
+                                                                 
+ batch_normalization_2 (Batc  (None, 8, 32)            128       
+ hNormalization)                                                 
+                                                                 
+ global_average_pooling1d (G  (None, 32)               0         
+ lobalAveragePooling1D)                                          
+                                                                 
+ dense_flipout (DenseFlipout  (None, 32)               2080      
+ )                                                               
+                                                                 
+ batch_normalization_3 (Batc  (None, 32)               128       
+ hNormalization)                                                 
+                                                                 
+ dense_flipout_1 (DenseFlipo  (None, 2)                130       
+ ut)                                                             
+                                                                 
+=================================================================
+Total params: 6,586
+Trainable params: 6,410
+Non-trainable params: 176
+_________________________________________________________________
+None
+GPU device not found ! Device: 
+------------ TRAINING ------------
+
+Features shape: (200, 100, 4)
+Labels shape: (200, 2)
+Initializing checkpoint from scratch.
+Epoch 0
+Validation loss decreased. Saved checkpoint for step 1: models/my_model_test/tf_ckpts_test/ckpt_test-1
+Time:  5.32s, ---- Loss: 39.6683, Acc.: 0.4750, Val. Loss: 39.3830, Val. Acc.: 0.8000
+
+Epoch 1
+Validation loss decreased. Saved checkpoint for step 2: models/my_model_test/tf_ckpts_test/ckpt_test-2
+Time:  0.17s, ---- Loss: 39.4476, Acc.: 0.5250, Val. Loss: 39.2268, Val. Acc.: 0.8000
+
+Epoch 2
+Validation loss decreased. Saved checkpoint for step 3: models/my_model_test/tf_ckpts_test/ckpt_test-3
+Time:  0.23s, ---- Loss: 39.2740, Acc.: 0.4850, Val. Loss: 39.0826, Val. Acc.: 0.8000
+
+Epoch 3
+Validation loss decreased. Saved checkpoint for step 4: models/my_model_test/tf_ckpts_test/ckpt_test-4
+Time:  0.41s, ---- Loss: 39.0751, Acc.: 0.6050, Val. Loss: 38.9407, Val. Acc.: 0.8000
+
+Epoch 4
+Validation loss decreased. Saved checkpoint for step 5: models/my_model_test/tf_ckpts_test/ckpt_test-5
+Time:  0.36s, ---- Loss: 38.9484, Acc.: 0.6200, Val. Loss: 38.8104, Val. Acc.: 0.8000
+
+Epoch 5
+Validation loss decreased. Saved checkpoint for step 6: models/my_model_test/tf_ckpts_test/ckpt_test-6
+Time:  0.27s, ---- Loss: 38.7934, Acc.: 0.6750, Val. Loss: 38.6832, Val. Acc.: 0.8000
+
+Epoch 6
+Validation loss decreased. Saved checkpoint for step 7: models/my_model_test/tf_ckpts_test/ckpt_test-7
+Time:  0.29s, ---- Loss: 38.6808, Acc.: 0.6600, Val. Loss: 38.5681, Val. Acc.: 0.8000
+
+Epoch 7
+Validation loss decreased. Saved checkpoint for step 8: models/my_model_test/tf_ckpts_test/ckpt_test-8
+Time:  0.27s, ---- Loss: 38.5450, Acc.: 0.6950, Val. Loss: 38.4566, Val. Acc.: 0.8000
+
+Epoch 8
+Validation loss decreased. Saved checkpoint for step 9: models/my_model_test/tf_ckpts_test/ckpt_test-9
+Time:  0.27s, ---- Loss: 38.4174, Acc.: 0.7250, Val. Loss: 38.3493, Val. Acc.: 0.8000
+
+Epoch 9
+Validation loss decreased. Saved checkpoint for step 10: models/my_model_test/tf_ckpts_test/ckpt_test-10
+Time:  0.20s, ---- Loss: 38.3129, Acc.: 0.7350, Val. Loss: 38.2491, Val. Acc.: 0.8000
+
+Epoch 10
+Validation loss decreased. Saved checkpoint for step 11: models/my_model_test/tf_ckpts_test/ckpt_test-11
+Time:  0.17s, ---- Loss: 38.2250, Acc.: 0.7200, Val. Loss: 38.1552, Val. Acc.: 0.8000
+
+Epoch 11
+Validation loss decreased. Saved checkpoint for step 12: models/my_model_test/tf_ckpts_test/ckpt_test-12
+Time:  0.37s, ---- Loss: 38.1092, Acc.: 0.7400, Val. Loss: 38.0634, Val. Acc.: 0.8000
+
+Epoch 12
+Validation loss decreased. Saved checkpoint for step 13: models/my_model_test/tf_ckpts_test/ckpt_test-13
+Time:  0.30s, ---- Loss: 38.0143, Acc.: 0.7450, Val. Loss: 37.9777, Val. Acc.: 0.8000
+
+Epoch 13
+Validation loss decreased. Saved checkpoint for step 14: models/my_model_test/tf_ckpts_test/ckpt_test-14
+Time:  0.20s, ---- Loss: 37.9089, Acc.: 0.7800, Val. Loss: 37.8948, Val. Acc.: 0.8000
+
+Epoch 14
+Validation loss decreased. Saved checkpoint for step 15: models/my_model_test/tf_ckpts_test/ckpt_test-15
+Time:  0.15s, ---- Loss: 37.8065, Acc.: 0.8200, Val. Loss: 37.8206, Val. Acc.: 0.8000
+
+Epoch 15
+Validation loss decreased. Saved checkpoint for step 16: models/my_model_test/tf_ckpts_test/ckpt_test-16
+Time:  0.30s, ---- Loss: 37.7090, Acc.: 0.8250, Val. Loss: 37.7456, Val. Acc.: 0.8000
+
+Epoch 16
+Validation loss decreased. Saved checkpoint for step 17: models/my_model_test/tf_ckpts_test/ckpt_test-17
+Time:  0.28s, ---- Loss: 37.6290, Acc.: 0.8500, Val. Loss: 37.6730, Val. Acc.: 0.8000
+
+Epoch 17
+Validation loss decreased. Saved checkpoint for step 18: models/my_model_test/tf_ckpts_test/ckpt_test-18
+Time:  0.18s, ---- Loss: 37.5768, Acc.: 0.8200, Val. Loss: 37.6079, Val. Acc.: 0.8000
+
+Epoch 18
+Validation loss decreased. Saved checkpoint for step 19: models/my_model_test/tf_ckpts_test/ckpt_test-19
+Time:  0.19s, ---- Loss: 37.4697, Acc.: 0.8300, Val. Loss: 37.5482, Val. Acc.: 0.8000
+
+Epoch 19
+Validation loss decreased. Saved checkpoint for step 20: models/my_model_test/tf_ckpts_test/ckpt_test-20
+Time:  0.31s, ---- Loss: 37.3853, Acc.: 0.8600, Val. Loss: 37.4850, Val. Acc.: 0.8000
+
+Epoch 20
+Validation loss decreased. Saved checkpoint for step 21: models/my_model_test/tf_ckpts_test/ckpt_test-21
+Time:  0.28s, ---- Loss: 37.3543, Acc.: 0.8150, Val. Loss: 37.4308, Val. Acc.: 0.8000
+
+Epoch 21
+Validation loss decreased. Saved checkpoint for step 22: models/my_model_test/tf_ckpts_test/ckpt_test-22
+Time:  0.26s, ---- Loss: 37.2612, Acc.: 0.8650, Val. Loss: 37.3760, Val. Acc.: 0.8000
+
+Epoch 22
+Validation loss decreased. Saved checkpoint for step 23: models/my_model_test/tf_ckpts_test/ckpt_test-23
+Time:  0.18s, ---- Loss: 37.1905, Acc.: 0.9000, Val. Loss: 37.3248, Val. Acc.: 0.8000
+
+Epoch 23
+Validation loss decreased. Saved checkpoint for step 24: models/my_model_test/tf_ckpts_test/ckpt_test-24
+Time:  0.32s, ---- Loss: 37.1308, Acc.: 0.9000, Val. Loss: 37.2831, Val. Acc.: 0.8000
+
+Epoch 24
+Validation loss decreased. Saved checkpoint for step 25: models/my_model_test/tf_ckpts_test/ckpt_test-25
+Time:  0.27s, ---- Loss: 37.1097, Acc.: 0.9050, Val. Loss: 37.2385, Val. Acc.: 0.8000
+
+Epoch 25
+Validation loss decreased. Saved checkpoint for step 26: models/my_model_test/tf_ckpts_test/ckpt_test-26
+Time:  0.25s, ---- Loss: 37.0533, Acc.: 0.9000, Val. Loss: 37.1944, Val. Acc.: 0.8000
+
+Epoch 26
+Validation loss decreased. Saved checkpoint for step 27: models/my_model_test/tf_ckpts_test/ckpt_test-27
+Time:  0.30s, ---- Loss: 37.0085, Acc.: 0.8900, Val. Loss: 37.1510, Val. Acc.: 0.8000
+
+Epoch 27
+Validation loss decreased. Saved checkpoint for step 28: models/my_model_test/tf_ckpts_test/ckpt_test-28
+Time:  0.33s, ---- Loss: 36.9436, Acc.: 0.8750, Val. Loss: 37.1129, Val. Acc.: 0.8000
+
+Epoch 28
+Validation loss decreased. Saved checkpoint for step 29: models/my_model_test/tf_ckpts_test/ckpt_test-29
+Time:  0.31s, ---- Loss: 36.8815, Acc.: 0.9100, Val. Loss: 37.0737, Val. Acc.: 0.8000
+
+Epoch 29
+Validation loss decreased. Saved checkpoint for step 30: models/my_model_test/tf_ckpts_test/ckpt_test-30
+Time:  0.37s, ---- Loss: 36.8295, Acc.: 0.9200, Val. Loss: 37.0417, Val. Acc.: 0.8000
+
+Epoch 30
+Validation loss decreased. Saved checkpoint for step 31: models/my_model_test/tf_ckpts_test/ckpt_test-31
+Time:  0.31s, ---- Loss: 36.8309, Acc.: 0.9050, Val. Loss: 37.0072, Val. Acc.: 0.8000
+
+Epoch 31
+Validation loss decreased. Saved checkpoint for step 32: models/my_model_test/tf_ckpts_test/ckpt_test-32
+Time:  0.33s, ---- Loss: 36.7556, Acc.: 0.9200, Val. Loss: 36.9781, Val. Acc.: 0.8000
+
+Epoch 32
+Validation loss decreased. Saved checkpoint for step 33: models/my_model_test/tf_ckpts_test/ckpt_test-33
+Time:  0.24s, ---- Loss: 36.7421, Acc.: 0.8950, Val. Loss: 36.9523, Val. Acc.: 0.8000
+
+Epoch 33
+Validation loss decreased. Saved checkpoint for step 34: models/my_model_test/tf_ckpts_test/ckpt_test-34
+Time:  0.32s, ---- Loss: 36.6784, Acc.: 0.9550, Val. Loss: 36.9266, Val. Acc.: 0.8000
+
+Epoch 34
+Validation loss decreased. Saved checkpoint for step 35: models/my_model_test/tf_ckpts_test/ckpt_test-35
+Time:  0.21s, ---- Loss: 36.6558, Acc.: 0.9400, Val. Loss: 36.8898, Val. Acc.: 0.8000
+
+Epoch 35
+Validation loss decreased. Saved checkpoint for step 36: models/my_model_test/tf_ckpts_test/ckpt_test-36
+Time:  0.20s, ---- Loss: 36.6449, Acc.: 0.9250, Val. Loss: 36.8708, Val. Acc.: 0.8000
+
+Epoch 36
+Validation loss decreased. Saved checkpoint for step 37: models/my_model_test/tf_ckpts_test/ckpt_test-37
+Time:  0.21s, ---- Loss: 36.6126, Acc.: 0.9450, Val. Loss: 36.8439, Val. Acc.: 0.8000
+
+Epoch 37
+Validation loss decreased. Saved checkpoint for step 38: models/my_model_test/tf_ckpts_test/ckpt_test-38
+Time:  0.19s, ---- Loss: 36.5744, Acc.: 0.9400, Val. Loss: 36.8181, Val. Acc.: 0.8000
+
+Epoch 38
+Validation loss decreased. Saved checkpoint for step 39: models/my_model_test/tf_ckpts_test/ckpt_test-39
+Time:  0.30s, ---- Loss: 36.5456, Acc.: 0.9350, Val. Loss: 36.8047, Val. Acc.: 0.8000
+
+Epoch 39
+Validation loss decreased. Saved checkpoint for step 40: models/my_model_test/tf_ckpts_test/ckpt_test-40
+Time:  0.21s, ---- Loss: 36.5172, Acc.: 0.9500, Val. Loss: 36.7802, Val. Acc.: 0.8000
+
+Epoch 40
+Validation loss decreased. Saved checkpoint for step 41: models/my_model_test/tf_ckpts_test/ckpt_test-41
+Time:  0.17s, ---- Loss: 36.5106, Acc.: 0.9400, Val. Loss: 36.7641, Val. Acc.: 0.8000
+
+Epoch 41
+Validation loss decreased. Saved checkpoint for step 42: models/my_model_test/tf_ckpts_test/ckpt_test-42
+Time:  0.17s, ---- Loss: 36.4538, Acc.: 0.9600, Val. Loss: 36.7487, Val. Acc.: 0.8000
+
+Epoch 42
+Validation loss decreased. Saved checkpoint for step 43: models/my_model_test/tf_ckpts_test/ckpt_test-43
+Time:  0.27s, ---- Loss: 36.4537, Acc.: 0.9500, Val. Loss: 36.7282, Val. Acc.: 0.8000
+
+Epoch 43
+Validation loss decreased. Saved checkpoint for step 44: models/my_model_test/tf_ckpts_test/ckpt_test-44
+Time:  0.31s, ---- Loss: 36.4324, Acc.: 0.9500, Val. Loss: 36.7151, Val. Acc.: 0.8000
+
+Epoch 44
+Validation loss decreased. Saved checkpoint for step 45: models/my_model_test/tf_ckpts_test/ckpt_test-45
+Time:  0.31s, ---- Loss: 36.3825, Acc.: 0.9650, Val. Loss: 36.6936, Val. Acc.: 0.8000
+
+Epoch 45
+Validation loss decreased. Saved checkpoint for step 46: models/my_model_test/tf_ckpts_test/ckpt_test-46
+Time:  0.24s, ---- Loss: 36.3957, Acc.: 0.9600, Val. Loss: 36.6774, Val. Acc.: 0.8000
+
+Epoch 46
+Validation loss decreased. Saved checkpoint for step 47: models/my_model_test/tf_ckpts_test/ckpt_test-47
+Time:  0.18s, ---- Loss: 36.3560, Acc.: 0.9700, Val. Loss: 36.6598, Val. Acc.: 0.8000
+
+Epoch 47
+Validation loss decreased. Saved checkpoint for step 48: models/my_model_test/tf_ckpts_test/ckpt_test-48
+Time:  0.17s, ---- Loss: 36.3716, Acc.: 0.9300, Val. Loss: 36.6545, Val. Acc.: 0.8000
+
+Epoch 48
+Validation loss decreased. Saved checkpoint for step 49: models/my_model_test/tf_ckpts_test/ckpt_test-49
+Time:  0.16s, ---- Loss: 36.3205, Acc.: 0.9650, Val. Loss: 36.6360, Val. Acc.: 0.8000
+
+Epoch 49
+Validation loss decreased. Saved checkpoint for step 50: models/my_model_test/tf_ckpts_test/ckpt_test-50
+Time:  0.19s, ---- Loss: 36.3163, Acc.: 0.9650, Val. Loss: 36.6328, Val. Acc.: 0.8000
+
+Epoch 50
+Validation loss decreased. Saved checkpoint for step 51: models/my_model_test/tf_ckpts_test/ckpt_test-51
+Time:  0.16s, ---- Loss: 36.3088, Acc.: 0.9700, Val. Loss: 36.6124, Val. Acc.: 0.8000
+
+Epoch 51
+Validation loss decreased. Saved checkpoint for step 52: models/my_model_test/tf_ckpts_test/ckpt_test-52
+Time:  0.16s, ---- Loss: 36.2749, Acc.: 0.9700, Val. Loss: 36.6071, Val. Acc.: 0.8000
+
+Epoch 52
+Validation loss decreased. Saved checkpoint for step 53: models/my_model_test/tf_ckpts_test/ckpt_test-53
+Time:  0.18s, ---- Loss: 36.2727, Acc.: 0.9650, Val. Loss: 36.5873, Val. Acc.: 0.8000
+
+Epoch 53
+Validation loss decreased. Saved checkpoint for step 54: models/my_model_test/tf_ckpts_test/ckpt_test-54
+Time:  0.30s, ---- Loss: 36.2911, Acc.: 0.9400, Val. Loss: 36.5818, Val. Acc.: 0.8000
+
+Epoch 54
+Validation loss decreased. Saved checkpoint for step 55: models/my_model_test/tf_ckpts_test/ckpt_test-55
+Time:  0.18s, ---- Loss: 36.2384, Acc.: 0.9850, Val. Loss: 36.5699, Val. Acc.: 0.8000
+
+Epoch 55
+Validation loss decreased. Saved checkpoint for step 56: models/my_model_test/tf_ckpts_test/ckpt_test-56
+Time:  0.28s, ---- Loss: 36.2816, Acc.: 0.9450, Val. Loss: 36.5657, Val. Acc.: 0.8000
+
+Epoch 56
+Validation loss decreased. Saved checkpoint for step 57: models/my_model_test/tf_ckpts_test/ckpt_test-57
+Time:  0.28s, ---- Loss: 36.2551, Acc.: 0.9450, Val. Loss: 36.5543, Val. Acc.: 0.8000
+
+Epoch 57
+Validation loss decreased. Saved checkpoint for step 58: models/my_model_test/tf_ckpts_test/ckpt_test-58
+Time:  0.22s, ---- Loss: 36.2558, Acc.: 0.9550, Val. Loss: 36.5496, Val. Acc.: 0.8000
+
+Epoch 58
+Validation loss decreased. Saved checkpoint for step 59: models/my_model_test/tf_ckpts_test/ckpt_test-59
+Time:  0.18s, ---- Loss: 36.2170, Acc.: 0.9650, Val. Loss: 36.5324, Val. Acc.: 0.8000
+
+Epoch 59
+Validation loss decreased. Saved checkpoint for step 60: models/my_model_test/tf_ckpts_test/ckpt_test-60
+Time:  0.20s, ---- Loss: 36.2077, Acc.: 0.9650, Val. Loss: 36.5285, Val. Acc.: 0.8000
+
+Epoch 60
+Validation loss decreased. Saved checkpoint for step 61: models/my_model_test/tf_ckpts_test/ckpt_test-61
+Time:  0.37s, ---- Loss: 36.1942, Acc.: 0.9750, Val. Loss: 36.5216, Val. Acc.: 0.8000
+
+Epoch 61
+Validation loss decreased. Saved checkpoint for step 62: models/my_model_test/tf_ckpts_test/ckpt_test-62
+Time:  0.27s, ---- Loss: 36.1697, Acc.: 0.9750, Val. Loss: 36.5122, Val. Acc.: 0.8000
+
+Epoch 62
+Validation loss decreased. Saved checkpoint for step 63: models/my_model_test/tf_ckpts_test/ckpt_test-63
+Time:  0.20s, ---- Loss: 36.1721, Acc.: 0.9700, Val. Loss: 36.5110, Val. Acc.: 0.8000
+
+Epoch 63
+Validation loss decreased. Saved checkpoint for step 64: models/my_model_test/tf_ckpts_test/ckpt_test-64
+Time:  0.26s, ---- Loss: 36.1806, Acc.: 0.9650, Val. Loss: 36.5052, Val. Acc.: 0.8000
+
+Epoch 64
+Validation loss decreased. Saved checkpoint for step 65: models/my_model_test/tf_ckpts_test/ckpt_test-65
+Time:  0.16s, ---- Loss: 36.1953, Acc.: 0.9500, Val. Loss: 36.4882, Val. Acc.: 0.8000
+
+Epoch 65
+Loss did not decrease. Count = 1
+Time:  0.14s, ---- Loss: 36.1581, Acc.: 0.9700, Val. Loss: 36.4913, Val. Acc.: 0.8000
+
+Epoch 66
+Validation loss decreased. Saved checkpoint for step 67: models/my_model_test/tf_ckpts_test/ckpt_test-66
+Time:  0.28s, ---- Loss: 36.1676, Acc.: 0.9600, Val. Loss: 36.4859, Val. Acc.: 0.8000
+
+Epoch 67
+Validation loss decreased. Saved checkpoint for step 68: models/my_model_test/tf_ckpts_test/ckpt_test-67
+Time:  0.22s, ---- Loss: 36.1303, Acc.: 0.9750, Val. Loss: 36.4789, Val. Acc.: 0.8000
+
+Epoch 68
+Validation loss decreased. Saved checkpoint for step 69: models/my_model_test/tf_ckpts_test/ckpt_test-68
+Time:  0.27s, ---- Loss: 36.1451, Acc.: 0.9700, Val. Loss: 36.4759, Val. Acc.: 0.8000
+
+Epoch 69
+Validation loss decreased. Saved checkpoint for step 70: models/my_model_test/tf_ckpts_test/ckpt_test-69
+Time:  0.27s, ---- Loss: 36.1284, Acc.: 0.9900, Val. Loss: 36.4718, Val. Acc.: 0.8000
+
+Saving at models/my_model_test/hist.png
